@@ -1,0 +1,28 @@
+created:
+    - app/Http/Controllers/UserController.php
+    - app/Http/Controllers/CarController.php
+    - app/Http/Controllers/TicketController.php
+    - database/factories/CarFactory.php
+    - database/factories/TicketFactory.php
+    - database/migrations/2024_09_28_211034_create_cars_table.php
+    - database/migrations/2024_09_28_211035_create_tickets_table.php
+    - app/Models/Car.php
+    - app/Models/Ticket.php
+    - tests/Feature/Http/Controllers/UserControllerTest.php
+    - tests/Feature/Http/Controllers/CarControllerTest.php
+    - tests/Feature/Http/Controllers/TicketControllerTest.php
+    - app/Http/Requests/UserStoreRequest.php
+    - app/Http/Requests/CarStoreRequest.php
+    - app/Http/Requests/TicketStoreRequest.php
+    - resources/views/user/index.blade.php
+    - resources/views/user/show.blade.php
+    - resources/views/car/index.blade.php
+    - resources/views/car/show.blade.php
+    - resources/views/ticket/index.blade.php
+    - resources/views/ticket/show.blade.php
+updated:
+    - routes/web.php
+models:
+    User: { name: string, email: string, email_verified_at: 'timestamp nullable', password: string, remember_token: 'string:100 nullable' }
+    Car: { patent: 'string:400', user_id: unsignedInteger, relationships: { belongsTo: User } }
+    Ticket: { date: dateTime, amount: integer, card_id: unsignedInteger, relationships: { belongsTo: Car } }

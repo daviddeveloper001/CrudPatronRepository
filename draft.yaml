@@ -1,0 +1,52 @@
+models:
+  Car:
+    patent: string:400
+    user_id: unsignedInteger
+    relationships:
+      belongsTo: User
+
+  Ticket:
+    date: dateTime
+    amount: integer
+    card_id: unsignedInteger
+    relationships:
+      belongsTo: Car
+
+controllers:
+  User:
+    index:
+      query: all
+      render: user.index with:users
+
+    show:
+      render: user.show with:user
+
+    store:
+      validate: first_name, last_name, email
+      save: user
+      redirect: user.index
+  Car:
+    index:
+      query: all
+      render: car.index with:cars
+
+    show:
+      render: car.show with:car.tickets
+
+    store:
+      validate: patent, user_id
+      save: car
+      redirect: cart.index
+
+  Ticket:
+    index:
+      query: all
+      render: ticket.index with:tickets
+
+    show:
+      render: ticket.show with:ticket
+
+    store:
+      validate: date, amount, card_id
+      save: ticket
+      redirect: ticket.index 
