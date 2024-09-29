@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Models\Car;
 use App\Models\Ticket;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -58,18 +59,18 @@ final class TicketControllerTest extends TestCase
     {
         $date = Carbon::parse($this->faker->dateTime());
         $amount = $this->faker->numberBetween(-10000, 10000);
-        $card_id = $this->faker->randomNumber();
+        $car = Car::factory()->create();
 
         $response = $this->post(route('tickets.store'), [
-            'date' => $date,
+            'date' => $date->toDateTimeString(),
             'amount' => $amount,
-            'card_id' => $card_id,
+            'car_id' => $car->id,
         ]);
 
         $tickets = Ticket::query()
             ->where('date', $date)
             ->where('amount', $amount)
-            ->where('card_id', $card_id)
+            ->where('car_id', $car->id)
             ->get();
         $this->assertCount(1, $tickets);
         $ticket = $tickets->first();

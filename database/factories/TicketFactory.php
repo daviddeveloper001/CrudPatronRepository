@@ -24,7 +24,6 @@ class TicketFactory extends Factory
         return [
             'date' => $this->faker->dateTime(),
             'amount' => $this->faker->numberBetween(-10000, 10000),
-            'card_id' => $this->faker->randomNumber(),
             'car_id' => Car::factory(),
         ];
     }

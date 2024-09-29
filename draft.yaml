@@ -8,7 +8,7 @@ models:
   Ticket:
     date: dateTime
     amount: integer
-    card_id: unsignedInteger
+    car_id: unsignedInteger
     relationships:
       belongsTo: Car
 

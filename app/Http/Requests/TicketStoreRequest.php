@@ -22,7 +22,9 @@ class TicketStoreRequest extends FormRequest
         return [
             'date' => ['required'],
             'amount' => ['required', 'integer'],
-            'card_id' => ['required', 'integer', 'gt:0'],
+            'date' => ['required'],
+            'amount' => ['required', 'integer'],
+            'car_id' => ['required', 'integer', 'exists:Cars,id'],
         ];
     }
 }

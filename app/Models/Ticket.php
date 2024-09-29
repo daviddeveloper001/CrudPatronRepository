@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Ticket extends Model
 {
@@ -18,7 +19,6 @@ class Ticket extends Model
     protected $fillable = [
         'date',
         'amount',
-        'card_id',
         'car_id',
     ];
 
@@ -30,12 +30,11 @@ class Ticket extends Model
     protected $casts = [
         'id' => 'integer',
         'date' => 'datetime',
-        'card_id' => 'integer',
         'car_id' => 'integer',
     ];
 
-    public function car(): BelongsTo
+    public function car(): HasMany
     {
-        return $this->belongsTo(Car::class);
+        return $this->hasMany(Car::class);
     }
 }
