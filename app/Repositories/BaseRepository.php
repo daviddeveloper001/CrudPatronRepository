@@ -14,7 +14,6 @@ class BaseRepository
         $this->relations = $relations;
     }
 
-
     public function all() 
     {
         $query = $this->model;
@@ -30,11 +29,24 @@ class BaseRepository
         if (!empty ($this->relations)) {
             $query = $query->with($this->relations);
         }
+        
         return $query->find($id);
     }
 
     public function save(Model $model)
     {
+        $model->save();
+        return $model;
+    }
+
+    public function create(array $data)
+    {
+        return $this->model->create($data);
+    }
+
+    public function update(Model $model, array $data)
+    {
+        $model->fill($data);
         $model->save();
         return $model;
     }
