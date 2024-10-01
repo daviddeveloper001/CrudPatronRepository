@@ -2,30 +2,46 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CarStoreRequest;
 use App\Models\Car;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Services\CarServices;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\Car\CarStoreRequest;
+use App\Http\Requests\Car\CarUpdateRequest;
 
 class CarController extends Controller
 {
-    public function index(Request $request): Response
-    {
-        $cars = Car::all();
+    public function __construct(private CarServices $carServices){}
 
-        return view('car.index', compact('cars'));
+    public function index(): JsonResponse
+    {
+        $cars = $this->carServices->getAllCars();
+
+        return response()->json($cars);
     }
 
-    public function show(Request $request, Car $car): Response
+    public function show(Car $car): JsonResponse
     {
-        return view('car.show', compact('car.tickets'));
+        $car = $this->carServices->getCarById($car);
+
+        return response()->json($car);
     }
 
-    public function store(CarStoreRequest $request): Response
+    public function store(CarStoreRequest $request): JsonResponse
     {
-        $car = Car::create($request->validated());
+        $car = $this->carServices->createCar($request->validated());
 
-        return redirect()->route('cart.index');
+        return response()->json($car, 201);
+    }
+
+    public function update(CarUpdateRequest $request, Car $car): JsonResponse
+    {
+        $card = $this->carServices->updateCar($car,$request->validated());
+        return response()->json($card);
+    }
+
+    public function destroy(Car $car) : JsonResponse
+    {
+        $this->carServices->deleteCar($car);
+        return response()->json(['message' => 'Car deleted'], 200);
     }
 }

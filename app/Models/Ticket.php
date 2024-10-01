@@ -33,8 +33,8 @@ class Ticket extends Model
         'car_id' => 'integer',
     ];
 
-    public function car(): HasMany
+    public function car(): BelongsTo
     {
-        return $this->hasMany(Car::class);
+        return $this->belongsTo(Car::class);
     }
 }

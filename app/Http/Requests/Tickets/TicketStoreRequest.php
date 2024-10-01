@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Tickets;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -22,9 +22,7 @@ class TicketStoreRequest extends FormRequest
         return [
             'date' => ['required'],
             'amount' => ['required', 'integer'],
-            'date' => ['required'],
-            'amount' => ['required', 'integer'],
-            'car_id' => ['required', 'integer', 'exists:Cars,id'],
+            'car_id' => ['required', 'integer', 'exists:cars,id'],
         ];
     }
 }

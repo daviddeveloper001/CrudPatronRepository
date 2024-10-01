@@ -41,7 +41,8 @@ class BaseRepository
 
     public function create(array $data)
     {
-        return $this->model->create($data);
+        $model = $this->model->create($data);
+        return $model;
     }
 
     public function update(Model $model, array $data)

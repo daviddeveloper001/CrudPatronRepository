@@ -2,30 +2,45 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TicketStoreRequest;
 use App\Models\Ticket;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Services\TicketServices;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\Tickets\TicketStoreRequest;
+use App\Http\Requests\Tickets\TicketUpdateRequest;
 
 class TicketController extends Controller
 {
-    public function index(Request $request): Response
-    {
-        $tickets = Ticket::all();
+    public function __construct(private TicketServices $ticketServices){}
 
-        return view('ticket.index', compact('tickets'));
+    public function index () : JsonResponse
+    {
+        $tickets = $this->ticketServices->getAllTickets();
+
+        return response()->json($tickets);
     }
 
-    public function show(Request $request, Ticket $ticket): Response
+    public function show(Ticket $ticket): JsonResponse
     {
-        return view('ticket.show', compact('ticket'));
+        $ticket = $this->ticketServices->getTicketById($ticket);
+        return response()->json($ticket);
     }
 
-    public function store(TicketStoreRequest $request): Response
+    public function store(TicketStoreRequest $request): JsonResponse
     {
-        $ticket = Ticket::create($request->validated());
+        $ticket = $this->ticketServices->createTicket($request->validated());
+        return response()->json($ticket, 201);
+    } 
 
-        return redirect()->route('ticket.index');
+    public function update(TicketUpdateRequest $request, Ticket $ticket): JsonResponse
+    {
+        $ticket = $this->ticketServices->updateTicket($ticket, $request->validated());
+        return response()->json($ticket);
     }
+
+    public function destroy(Ticket $ticket) : JsonResponse 
+    {
+        $ticket = $this->ticketServices->deleteTicket($ticket);
+        return response()->json(['message' => 'User deleted'], 200); 
+    }
+
 }

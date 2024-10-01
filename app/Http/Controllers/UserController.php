@@ -2,51 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\User\UserUpdateRequest;
 use App\Models\User;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\UserStoreRequest;
-use App\Repositories\UserRepository;
 use App\Services\UserServices;
+use Illuminate\Http\JsonResponse;
+use App\Http\Resources\V1\UserResource;
+use App\Http\Resources\V1\UserCollection;
+use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
+use Illuminate\Database\Eloquent\Casts\Json;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
     public function __construct(private UserServices $userServices) {}
-    public function index(): JsonResponse
+
+
+    public function index()
     {
         $users = $this->userServices->getAllUsers();
 
-        return response()->json($users);
+        return UserResource::collection($users);
+
     }
 
-    public function show($id): JsonResponse
+    public function show(User $user)
     {
-        $user = $this->userServices->getUserById($id);
+        $user = $this->userServices->getUserById($user);
 
-        return response()->json($user);
+        return new UserResource($user);
+
     }
 
-    public function store(UserStoreRequest $request)
+    public function store(UserStoreRequest $request): JsonResponse
     {
         $user = $this->userServices->createUser($request->validated());
-        return response()->json($user, 201);
+        return new JsonResponse($user, Response::HTTP_CREATED);
     }
 
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
         $user = $this->userServices->updateUser($user, $request->validated());
-        return response()->json($user);
+        return new JsonResponse($user, Response::HTTP_ACCEPTED);
+
     }
 
 
     public function destroy(User $user) : JsonResponse
     {
         $this->userServices->deleteUser($user);
-        return response()->json(['message' => 'User deleted'], 200);
+        return new JsonResponse(['message' => 'User deleted'], Response::HTTP_OK);
     }
 
     public function getWithSameFirstAndLastName($name) : JsonResponse
@@ -54,6 +58,6 @@ class UserController extends Controller
 
         $users = $this->userServices->getWithSameFirstAndLastName($name);
 
-        return response()->json($users);
+        return new JsonResponse($users);
     }
 }
