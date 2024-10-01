@@ -1,6 +1,9 @@
 <?php
 
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Foundation\Application;
+use App\Exceptions\UserNotFoundException;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -17,11 +20,15 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        /* $exceptions->renderable(function (ModelNotFoundException $e, $request) {
+        $exceptions->renderable(function (ModelNotFoundException $e, $request) {
             return response()->json(['message' => 'Register not found'], 404);
         });
 
         $exceptions->renderable(function (NotFoundHttpException $e, $request) {
-            return response()->json(['message' => 'Register not found'], 404);
-        }); */
+            return response()->json([
+                'error' => 'RegisterNotFound',
+                'message' => 'Registro no encontrado'
+            ], Response::HTTP_NOT_FOUND);
+        });
+
     })->create();

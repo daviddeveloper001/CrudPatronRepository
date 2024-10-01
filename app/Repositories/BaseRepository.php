@@ -14,22 +14,28 @@ class BaseRepository
         $this->relations = $relations;
     }
 
-    public function all() 
+    // Repositorio: UserRepository
+    public function all(int $perPage = 15)
     {
-        $query = $this->model;
-        if (!empty ($this->relations)) {
+        $query = $this->model->latest(); // Ordenamos por la columna created_at (últimos registros)
+
+        // Si existen relaciones, las cargamos
+        if (!empty($this->relations)) {
             $query = $query->with($this->relations);
         }
-        return $query->get();
+
+        // Retornamos los resultados paginados
+        return $query->paginate($perPage);
     }
+
 
     public function getById($id)
     {
         $query = $this->model;
-        if (!empty ($this->relations)) {
+        if (!empty($this->relations)) {
             $query = $query->with($this->relations);
         }
-        
+
         return $query->find($id);
     }
 
@@ -56,6 +62,4 @@ class BaseRepository
     {
         $model->delete();
     }
-
-
 }

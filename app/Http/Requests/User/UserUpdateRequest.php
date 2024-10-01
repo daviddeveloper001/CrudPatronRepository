@@ -27,7 +27,7 @@ class UserUpdateRequest extends FormRequest
             'first_name' => ['required', 'string'],
             'last_name' => ['string'],
             'email' => ['required', 'email','unique:users,email,'. $userId],
-            'password' => ['required', 'string', 'min:6'],
+            'password' => ['string', 'min:6'],
         ];
     }
 }
