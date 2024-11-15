@@ -41,7 +41,6 @@ class UserServices
 
         return $this->userRepository->create($data);
 
-        // Registrar en un log
         Log::info("Usuario creado: {$user->id}");
     }
 
@@ -85,11 +84,11 @@ class UserServices
     
     private function prepareUserData(array $data): array
     {
-        // Normalizar el nombre y apellido
+
         $data['first_name'] = ucfirst(strtolower($data['first_name']));
         $data['last_name'] = ucfirst(strtolower($data['last_name']));
 
-        // Si el password está presente, lo encriptamos
+
         if (isset($data['password'])) {
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
         }

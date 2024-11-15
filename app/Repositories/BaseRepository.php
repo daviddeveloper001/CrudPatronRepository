@@ -17,14 +17,12 @@ class BaseRepository
     // Repositorio: UserRepository
     public function all(int $perPage = 15)
     {
-        $query = $this->model->latest(); // Ordenamos por la columna created_at (últimos registros)
+        $query = $this->model->latest(); 
 
-        // Si existen relaciones, las cargamos
         if (!empty($this->relations)) {
             $query = $query->with($this->relations);
         }
 
-        // Retornamos los resultados paginados
         return $query->paginate($perPage);
     }
 
@@ -39,11 +37,11 @@ class BaseRepository
         return $query->find($id);
     }
 
-    public function save(Model $model)
+    /* public function save(Model $model)
     {
         $model->save();
         return $model;
-    }
+    } */
 
     public function create(array $data)
     {

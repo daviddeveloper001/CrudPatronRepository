@@ -17,17 +17,15 @@ class UserController extends Controller
     public function __construct(private UserServices $userServices) {}
 
 
-    // Controlador: UserController
     public function index()
     {
-        // Puedes ajustar el valor predeterminado de paginación si lo necesitas
-        $users = $this->userServices->getAllUsers(2); // 10 usuarios por página, por ejemplo
+        $users = $this->userServices->getAllUsers(2); 
 
         return UserResource::collection($users);
     }
 
 
-    public function show(User $user)
+    public function show(User $user) 
     {
         $user = $this->userServices->getUserById($user->id);
 
@@ -42,6 +40,7 @@ class UserController extends Controller
 
     public function update(UserUpdateRequest $request, User $user): JsonResponse
     {
+
         $user = $this->userServices->updateUser($user, $request->validated());
 
         return new JsonResponse($user, Response::HTTP_OK);
